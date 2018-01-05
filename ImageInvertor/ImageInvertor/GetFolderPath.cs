@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace ImageInvertor
 {
     public static class FolderDialog
     {
+        /// <summary>
+        /// Get folder path
+        /// </summary>
+        /// <returns></returns>
         public static string GetFolderPath()
         {
             FolderBrowserDialog folderDialog = new FolderBrowserDialog();
