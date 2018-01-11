@@ -24,7 +24,7 @@ namespace ImageInvertor
             ThreadPool.SetMaxThreads(ProcessorCount, ProcessorCount);
         }
         #endregion
-        
+
         #region Events
         /// <summary>
         /// Event for change UI control during processing
@@ -37,13 +37,13 @@ namespace ImageInvertor
         /// <summary>
         /// Collection of Image class as source for WrapPanel
         /// </summary>
-        private ObservableCollection<Image> _Images = new ObservableCollection<Image>();
-        
+        private ObservableCollection<ImageClass> _Images = new ObservableCollection<ImageClass>();
+
         /// <summary>
         /// List of file pathes
         /// </summary>
         private List<string> FileList;
-       
+
         /// <summary>
         /// Source folder, where files for processing
         /// </summary>
@@ -58,7 +58,7 @@ namespace ImageInvertor
         /// Number of processor count
         /// </summary>
         private int ProcessorCount;
-        
+
         /// <summary>
         /// ProgressBar.Value
         /// </summary>
@@ -81,12 +81,19 @@ namespace ImageInvertor
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void ResetProgress()
+        {
+            ImagesCount = 1;
+            ProgressValue = 0;
+        }
+
         /// <summary>
         /// Recursive search files
         /// </summary>
         /// <param name="path"></param>
         public void Search()
         {
+            ResetProgress();
             if (!string.IsNullOrEmpty(SourceFolderPath))
             {
                 try
@@ -94,7 +101,7 @@ namespace ImageInvertor
                     Images.Clear();
                     FileList = Directory.EnumerateFiles(SourceFolderPath, "*.*", SearchOption.AllDirectories).Where(file => file.ToLower().EndsWith("jpg")).ToList();
                     foreach (string FilePath in FileList)
-                        Images.Add(new Image(FilePath));
+                        Images.Add(new ImageClass(FilePath));
                     ImagesCount = Images.Count;
                 }
                 catch (Exception ex)
@@ -102,7 +109,7 @@ namespace ImageInvertor
                     MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -110,7 +117,7 @@ namespace ImageInvertor
         /// Get from: https://stackoverflow.com/questions/541331/effective-way-of-making-negative-of-image-without-external-dlls
         /// </summary>
         /// <param name="image"></param>
-        private void Negative(Image img)
+        private Bitmap Negative(ImageClass img)
         {
             const int RED_PIXEL = 2;
             const int GREEN_PIXEL = 1;
@@ -138,14 +145,15 @@ namespace ImageInvertor
                             pixel[pos + BLUE_PIXEL] = (byte)(255 - pixel[pos + BLUE_PIXEL]);
                         }
                     }
-                    bitmap.Save(DestinationFolderPath + "\\" + img.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
                     ProgressValue++;
+                    return bitmap;
                 }
             }
             finally
             {
                 bitmap.UnlockBits(bmData);
             }
+            
         }
 
         /// <summary>
@@ -153,15 +161,13 @@ namespace ImageInvertor
         /// </summary>
         public async void InvertImages()
         {
-            foreach (Image img in Images)
+            await Task.Factory.StartNew(() =>
+            Parallel.ForEach(Images, (img) =>
             {
-                await Task.Run(() =>
-                {
-                    Negative(img);
-                });
-            }
-            MessageBox.Show("Файлов обработано: " + ImagesCount, "Image Invertor", MessageBoxButton.OK, MessageBoxImage.Asterisk);
-            ProgressValue = 0;
+                Bitmap bitmap = Negative(img);
+                bitmap.Save(DestinationFolderPath + "\\" + img.FileName, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }));
+
         }
         #endregion
 
@@ -201,7 +207,7 @@ namespace ImageInvertor
         /// <summary>
         /// Access to collection of images (need for source WPF wrap panel)
         /// </summary>
-        public ObservableCollection<Image> Images
+        public ObservableCollection<ImageClass> Images
         {
             get
             {
@@ -229,7 +235,7 @@ namespace ImageInvertor
                 RaisePropertyChanged("ProgressValue");
             }
         }
-        
+
         /// <summary>
         /// For progressbar.Maximum
         /// </summary>

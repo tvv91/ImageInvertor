@@ -85,7 +85,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GetFolderPath.cs" />
-    <Compile Include="Image.cs" />
+    <Compile Include="ImageClass.cs" />
     <Compile Include="Invertor.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

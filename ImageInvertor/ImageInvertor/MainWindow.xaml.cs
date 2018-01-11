@@ -22,6 +22,7 @@ namespace ImageInvertor
 
         private void StartProcessButton_Click(object sender, RoutedEventArgs e)
         {
+            
             if (string.IsNullOrEmpty(invertor.SourceFolderPath))
                 MessageBox.Show("Не выбрана папка с файлами", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
             else if (string.IsNullOrEmpty(invertor.DestinationFolderPath))

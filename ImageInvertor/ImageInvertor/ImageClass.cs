@@ -1,12 +1,16 @@
-﻿using System.IO;
+﻿using System;
+using System.ComponentModel;
+using System.IO;
+using System.Windows.Data;
+using System.Windows.Media.Imaging;
 
 namespace ImageInvertor
 {
-    public class Image
+    public class ImageClass
     {
         public string FilePath { get; set; }
         public string FileName { get; set; }
-        public Image(string ImagePath)
+        public ImageClass(string ImagePath)
         {
             FilePath = ImagePath;
             FileName = Path.GetFileName(FilePath);
