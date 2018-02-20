@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -146,6 +147,8 @@ namespace ImageInvertor
                         }
                     }
                     ProgressValue++;
+                    if (ProgressValue == ImagesCount)
+                        MessageBox.Show("Файлы обработаны", "Image Invertor", MessageBoxButton.OK, MessageBoxImage.Asterisk);
                     return bitmap;
                 }
             }

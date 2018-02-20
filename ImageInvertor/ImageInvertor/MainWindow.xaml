@@ -36,7 +36,7 @@
         </ScrollViewer>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="580"></ColumnDefinition>
+                <ColumnDefinition Width="565"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="1" Grid.Column="0"
@@ -66,14 +66,13 @@
                      ToolTip="Выберите папку для сохранения результатов"/>
                 <Button Name="StartProcessButton"
                     Margin="2"
-                    Click="StartProcessButton_Click">Начать обработку</Button>
+                    Click="StartProcessButton_Click">Инвертировать</Button>
             </StackPanel>
             <ProgressBar Name="PBar" Grid.Column="1" 
                          Margin="2" 
                          Minimum="0" 
                          Maximum="{Binding Path=ImagesCount}" 
-                         Value="{Binding Path=ProgressValue}"></ProgressBar>
-
+                         Value="{Binding Path=ProgressValue}"/>
         </Grid>
     </Grid>
 </Window>
